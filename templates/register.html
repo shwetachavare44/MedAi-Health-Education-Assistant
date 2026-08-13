@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | MedAI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="auth-page">
+
+<div class="auth-container">
+
+    <div class="auth-brand">
+
+        <div class="brand-icon">✚</div>
+
+        <h1>MedAI</h1>
+
+        <p>Your intelligent health companion</p>
+
+    </div>
+
+
+    <div class="auth-card">
+
+        <div class="auth-header">
+
+            <span class="auth-icon">✨</span>
+
+            <h2>Create your account</h2>
+
+            <p>Join MedAI and keep your health questions organized.</p>
+
+        </div>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% for category, message in messages %}
+
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endwith %}
+
+
+        <form method="POST">
+
+            <label>Full name</label>
+
+            <div class="input-wrapper">
+
+                <span>👤</span>
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Your name"
+                    required
+                >
+
+            </div>
+
+
+            <label>Email address</label>
+
+            <div class="input-wrapper">
+
+                <span>✉️</span>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    required
+                >
+
+            </div>
+
+
+            <label>Password</label>
+
+            <div class="input-wrapper">
+
+                <span>🔒</span>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="At least 6 characters"
+                    required
+                >
+
+            </div>
+
+
+            <label>Confirm password</label>
+
+            <div class="input-wrapper">
+
+                <span>🔐</span>
+
+                <input
+                    type="password"
+                    name="confirm_password"
+                    placeholder="Repeat your password"
+                    required
+                >
+
+            </div>
+
+
+            <button class="primary-btn"
+                    type="submit">
+
+                Create account
+
+                <span>→</span>
+
+            </button>
+
+        </form>
+
+
+        <p class="login-link">
+
+            Already have an account?
+
+            <a href="{{ url_for('login') }}">
+                Sign in
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

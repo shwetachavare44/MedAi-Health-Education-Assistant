@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>MedAI | Health Assistant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ✚
+        </div>
+
+        <div>
+
+            <strong>MedAI</strong>
+
+            <small>
+                Health Assistant
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <div class="nav-actions">
+
+        <button
+            id="themeBtn"
+            class="icon-button"
+            title="Change theme">
+
+            🌙
+
+        </button>
+
+
+        <div class="user-menu">
+
+            <div class="avatar">
+                {{ user_name[0]|upper }}
+            </div>
+
+            <div class="user-info">
+
+                <strong>
+                    {{ user_name }}
+                </strong>
+
+                <small>
+                    Patient
+                </small>
+
+            </div>
+
+            <a href="{{ url_for('logout') }}"
+               class="logout">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="dashboard">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <span class="badge">
+                ✨ AI-POWERED HEALTH EDUCATION
+            </span>
+
+            <h1>
+                Your intelligent
+                <span>health companion.</span>
+            </h1>
+
+            <p>
+                Ask health questions and receive clear,
+                educational information powered by AI.
+            </p>
+
+            <div class="hero-points">
+
+                <span>✓ Easy to understand</span>
+
+                <span>✓ Private</span>
+
+                <span>✓ Available anytime</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-illustration">
+
+            <div class="health-orb">
+
+                <div class="pulse">
+                    ❤
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= QUESTION CARD ================= -->
+
+    <section class="question-card">
+
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>
+                    Ask a health question
+                </h2>
+
+                <p>
+                    Describe what you would like to know.
+                </p>
+
+            </div>
+
+            <span class="private-badge">
+                🔒 Private
+            </span>
+
+        </div>
+
+
+        <div class="textarea-container">
+
+            <textarea
+                id="question"
+                maxlength="1000"
+                placeholder="Example: What are some healthy habits for better sleep?"
+            ></textarea>
+
+
+            <div class="textarea-footer">
+
+                <span id="counter">
+                    0 / 1000
+                </span>
+
+                <button
+                    id="clearBtn"
+                    class="clear-btn">
+
+                    Clear
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- GENERATE BUTTON -->
+
+        <button
+            id="generateBtn"
+            class="generate-btn">
+
+            <span id="generateText">
+                Generate Health Response
+            </span>
+
+            <span class="arrow">
+                →
+            </span>
+
+        </button>
+
+
+        <!-- QUICK QUESTIONS -->
+
+        <div class="quick-section">
+
+            <p>
+                Try asking:
+            </p>
+
+
+            <div class="quick-buttons">
+
+                <button
+                    data-question="What are the common causes of headaches?">
+
+                    🤕 Headache causes
+
+                </button>
+
+
+                <button
+                    data-question="What are the signs of dehydration?">
+
+                    💧 Dehydration
+
+                </button>
+
+
+                <button
+                    data-question="What are healthy habits for better sleep?">
+
+                    😴 Better sleep
+
+                </button>
+
+
+                <button
+                    data-question="What are some simple healthy lifestyle habits?">
+
+                    💗 Healthy lifestyle
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= LOADING ================= -->
+
+    <section
+        id="loading"
+        class="loading-card hidden">
+
+        <div class="loader"></div>
+
+        <div>
+
+            <strong>
+                MedAI is thinking...
+            </strong>
+
+            <p>
+                Preparing an educational response for you.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= RESPONSE ================= -->
+
+    <section
+        id="responseCard"
+        class="response-card hidden">
+
+
+        <div class="response-header">
+
+            <div class="ai-avatar">
+                ✨
+            </div>
+
+            <div>
+
+                <h2>
+                    MedAI Response
+                </h2>
+
+                <span>
+                    AI-generated educational information
+                </span>
+
+            </div>
+
+
+            <button
+                id="copyBtn"
+                class="copy-btn">
+
+                📋 Copy
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="responseText"
+            class="response-text">
+        </div>
+
+
+        <div class="medical-note">
+
+            ⚕️
+            <strong>Important:</strong>
+
+            This information is for educational purposes
+            and is not a substitute for professional medical
+            diagnosis or treatment.
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= HISTORY ================= -->
+
+    <section class="history-card">
+
+        <div class="history-header">
+
+            <div>
+
+                <h2>
+                    Recent questions
+                </h2>
+
+                <p>
+                    Your latest health queries
+                </p>
+
+            </div>
+
+            <button
+                id="historyBtn"
+                class="history-btn">
+
+                View history
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="historyList"
+            class="history-list">
+
+            <div class="empty-history">
+
+                🩺
+
+                <p>
+                    Your recent questions will appear here.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        © 2026 MedAI · Educational health information
+    </p>
+
+</footer>
+
+
+
+<script>
+
+const question = document.getElementById("question");
+
+const counter = document.getElementById("counter");
+
+const clearBtn = document.getElementById("clearBtn");
+
+const generateBtn = document.getElementById("generateBtn");
+
+const generateText = document.getElementById("generateText");
+
+const loading = document.getElementById("loading");
+
+const responseCard = document.getElementById("responseCard");
+
+const responseText = document.getElementById("responseText");
+
+const copyBtn = document.getElementById("copyBtn");
+
+const historyBtn = document.getElementById("historyBtn");
+
+const historyList = document.getElementById("historyList");
+
+const themeBtn = document.getElementById("themeBtn");
+
+
+// =======================================
+// CHARACTER COUNTER
+// =======================================
+
+question.addEventListener("input", () => {
+
+    counter.textContent =
+        `${question.value.length} / 1000`;
+
+});
+
+
+// =======================================
+// CLEAR
+// =======================================
+
+clearBtn.addEventListener("click", () => {
+
+    question.value = "";
+
+    counter.textContent = "0 / 1000";
+
+    question.focus();
+
+});
+
+
+// =======================================
+// QUICK QUESTIONS
+// =======================================
+
+document.querySelectorAll(
+    ".quick-buttons button"
+).forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        question.value =
+            button.dataset.question;
+
+        question.dispatchEvent(
+            new Event("input")
+        );
+
+        question.focus();
+
+    });
+
+});
+
+
+// =======================================
+// GENERATE RESPONSE
+// =======================================
+
+generateBtn.addEventListener(
+    "click",
+    async () => {
+
+        const text =
+            question.value.trim();
+
+
+        if (!text) {
+
+            question.focus();
+
+            return;
+
+        }
+
+
+        // Hide previous response
+
+        responseCard.classList.add(
+            "hidden"
+        );
+
+
+        // Show loading
+
+        loading.classList.remove(
+            "hidden"
+        );
+
+
+        generateBtn.disabled = true;
+
+        generateText.textContent =
+            "Generating...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/generate",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            question: text
+                        })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                alert(
+                    data.error ||
+                    "Something went wrong."
+                );
+
+                return;
+
+            }
+
+
+            responseText.innerHTML =
+                formatResponse(
+                    data.response
+                );
+
+
+            responseCard.classList.remove(
+                "hidden"
+            );
+
+
+            responseCard.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to connect to the server."
+            );
+
+        }
+
+        finally {
+
+            loading.classList.add(
+                "hidden"
+            );
+
+            generateBtn.disabled = false;
+
+            generateText.textContent =
+                "Generate Health Response";
+
+        }
+
+    }
+);
+
+
+// =======================================
+// FORMAT AI RESPONSE
+// =======================================
+
+function formatResponse(text) {
+
+    return text
+        .replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        )
+        .replace(
+            /\n\n/g,
+            "<br><br>"
+        )
+        .replace(
+            /\n/g,
+            "<br>"
+        );
+
+}
+
+
+// =======================================
+// COPY
+// =======================================
+
+copyBtn.addEventListener(
+    "click",
+    async () => {
+
+        const text =
+            responseText.innerText;
+
+        await navigator.clipboard.writeText(
+            text
+        );
+
+        copyBtn.textContent =
+            "✓ Copied";
+
+        setTimeout(() => {
+
+            copyBtn.textContent =
+                "📋 Copy";
+
+        }, 2000);
+
+    }
+);
+
+
+// =======================================
+// HISTORY
+// =======================================
+
+historyBtn.addEventListener(
+    "click",
+    async () => {
+
+        const response =
+            await fetch("/history");
+
+        const history =
+            await response.json();
+
+
+        if (!history.length) {
+
+            historyList.innerHTML = `
+                <div class="empty-history">
+                    🩺
+                    <p>No questions yet.</p>
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        historyList.innerHTML =
+            history.map(item => `
+
+                <div class="history-item">
+
+                    <div class="history-icon">
+                        💬
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            ${escapeHtml(item.question)}
+                        </strong>
+
+                        <small>
+                            ${item.created_at}
+                        </small>
+
+                    </div>
+
+                </div>
+
+            `).join("");
+
+    }
+);
+
+
+// =======================================
+// SECURITY HELPER
+// =======================================
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+// =======================================
+// DARK MODE
+// =======================================
+
+themeBtn.addEventListener(
+    "click",
+    () => {
+
+        document.body.classList.toggle(
+            "dark-mode"
+        );
+
+
+        if (
+            document.body.classList.contains(
+                "dark-mode"
+            )
+        ) {
+
+            themeBtn.textContent = "☀️";
+
+        } else {
+
+            themeBtn.textContent = "🌙";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
